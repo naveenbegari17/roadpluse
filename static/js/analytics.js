@@ -185,5 +185,14 @@ document.addEventListener('DOMContentLoaded', function() {
     })
     .catch(err => {
       console.error("Failed to render Chart.js analytics:", err);
+      const chartsContainer = document.querySelector('.charts-grid');
+      if (chartsContainer) {
+        const errorNotice = document.createElement('div');
+        errorNotice.className = 'flash-alert flash-error';
+        errorNotice.style.gridColumn = '1 / -1';
+        errorNotice.innerHTML = '<span>⚠️ Unable to load live analytics charts. Please verify network connection or reload.</span>';
+        chartsContainer.prepend(errorNotice);
+      }
     });
 });
+

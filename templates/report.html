@@ -84,6 +84,12 @@
           </div>
         </div>
 
+        <div style="margin-bottom: 1.25rem;">
+          <button type="button" id="btn-use-gps" class="btn btn-secondary btn-sm" style="width: 100%;">
+            📍 Auto-Detect My Current GPS Location
+          </button>
+        </div>
+
         <button type="submit" class="btn btn-primary" id="btn-submit-report" style="width: 100%; margin-top: 0.5rem;">
           ⚡ Submit Hazard &amp; Calculate Risk Score
         </button>
@@ -147,7 +153,31 @@
       updateInputs(pos.lat, pos.lng);
     });
 
+    // Browser Geolocation auto-detect
+    const gpsBtn = document.getElementById('btn-use-gps');
+    if (gpsBtn && navigator.geolocation) {
+      gpsBtn.addEventListener('click', function() {
+        gpsBtn.innerText = 'Detecting GPS Satellite Signal...';
+        navigator.geolocation.getCurrentPosition(
+          function(pos) {
+            const userLat = pos.coords.latitude;
+            const userLng = pos.coords.longitude;
+            map.setView([userLat, userLng], 15);
+            marker.setLatLng([userLat, userLng]);
+            updateInputs(userLat, userLng);
+            gpsBtn.innerText = '📍 Location Locked from Device';
+          },
+          function(err) {
+            alert('Location access denied or unavailable: ' + err.message);
+            gpsBtn.innerText = '📍 Auto-Detect My Current GPS Location';
+          },
+          { enableHighAccuracy: true, timeout: 10000 }
+        );
+      });
+    }
+
     const form = document.getElementById('hazard-report-form');
+
     const submitBtn = document.getElementById('btn-submit-report');
     form.addEventListener('submit', function() {
       submitBtn.disabled = true;

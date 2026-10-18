@@ -21,12 +21,13 @@ def get_connection():
             url = DATABASE_URL
             if url.startswith("postgres://"):
                 url = url.replace("postgres://", "postgresql://", 1)
-            conn = psycopg2.connect(url, sslmode="require")
+            conn = psycopg2.connect(url, sslmode="require", cursor_factory=psycopg2.extras.RealDictCursor)
             return conn, "postgres"
         except Exception as e:
             print(f"[RoadPulse DB Warning] Failed to connect to PostgreSQL: {e}. Falling back to SQLite.")
 
     # SQLite fallback / default
+
     # Ensure directory exists if needed
     db_dir = os.path.dirname(os.path.abspath(DATABASE_PATH))
     if db_dir and not os.path.exists(db_dir):

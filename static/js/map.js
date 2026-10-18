@@ -109,8 +109,19 @@ document.addEventListener('DOMContentLoaded', function() {
       })
       .catch(err => {
         console.error("Error fetching map reports:", err);
+        countLabel.textContent = "Offline / Error";
+        emptyState.style.display = 'block';
+        emptyState.innerHTML = `
+          <div style="font-size: 2rem; margin-bottom: 0.5rem;">⚠️</div>
+          <h3 style="font-size: 1.15rem; color: #ffffff; margin-bottom: 0.35rem; font-weight: 700;">Connection Error</h3>
+          <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 1.25rem;">
+            Failed to retrieve live hazard signals from backend.
+          </p>
+          <button onclick="location.reload()" class="btn btn-primary btn-sm">Reload Map</button>
+        `;
       });
   }
+
 
   // Filter Event Listeners
   categoryFilter.addEventListener('change', fetchAndRenderReports);

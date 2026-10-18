@@ -1,4 +1,5 @@
 import os
+import html
 from flask import Flask, render_template, request, jsonify, redirect, url_for, flash
 from database.db import (
     init_db,
@@ -37,25 +38,36 @@ def live_map():
 @app.route("/report", methods=["GET", "POST"])
 def report_hazard():
     if request.method == "POST":
-        title = request.form.get("title", "").strip()
+        title_raw = request.form.get("title", "").strip()
         category = request.form.get("category", "").strip()
-        description = request.form.get("description", "").strip()
+        description_raw = request.form.get("description", "").strip()
         severity = request.form.get("severity", "").strip()
-        location_name = request.form.get("location_name", "").strip()
+        location_raw = request.form.get("location_name", "").strip()
         lat_raw = request.form.get("latitude", "").strip()
         lon_raw = request.form.get("longitude", "").strip()
+
+        # Sanitize against XSS attacks
+        title = html.escape(title_raw)
+        description = html.escape(description_raw)
+        location_name = html.escape(location_raw)
 
         errors = []
         if not title:
             errors.append("Hazard title is required.")
+        if len(title) > 200:
+            errors.append("Hazard title is too long (maximum 200 characters).")
         if category not in ["Pothole", "Damaged Road", "Broken Streetlight", "Waterlogging", "Dangerous Junction", "Other"]:
             errors.append("Please select a valid hazard category.")
         if not description:
             errors.append("Description is required.")
+        if len(description) > 3000:
+            errors.append("Description is too long (maximum 3000 characters).")
         if severity not in ["Low", "Medium", "High", "Critical"]:
             errors.append("Please choose a valid severity level.")
         if not location_name:
             errors.append("Location description or landmark is required.")
+        if len(location_name) > 200:
+            errors.append("Location description is too long (maximum 200 characters).")
 
         try:
             latitude = float(lat_raw)
@@ -161,15 +173,16 @@ def api_analytics():
 
 @app.errorhandler(404)
 def page_not_found(e):
-    return render_template("base.html", error_title="404 - Page Not Found",
-                           error_message="The requested RoadPulse page or hazard record does not exist."), 404
+    return render_template("base.html", error_title="404 — Hazard Record Not Found",
+                           error_message="The requested RoadPulse page, map tile or hazard report does not exist or has been relocated."), 404
 
 
 @app.errorhandler(500)
 def server_error(e):
-    return render_template("base.html", error_title="500 - Server Error",
-                           error_message="An internal server error occurred while processing the road safety data."), 500
+    return render_template("base.html", error_title="500 — Server Incident",
+                           error_message="An internal compute issue occurred while processing road safety intelligence. Please try again shortly."), 500
 
 
 if __name__ == "__main__":
     app.run(debug=True, host="127.0.0.1", port=5000)
+
