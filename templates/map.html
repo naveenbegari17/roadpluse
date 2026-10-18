@@ -4,27 +4,32 @@
 
 {% block content %}
 <div class="container">
-  <div style="margin-bottom: 1.25rem; display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 1rem;">
+  <div style="margin-bottom: 1.5rem; display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 1rem;">
     <div>
-      <h1 style="font-size: 1.85rem; font-weight: 800; color: var(--text-primary); margin-bottom: 0.25rem;">
+      <div class="hero-pill" style="margin-bottom: 0.5rem;">
+        <span>🗺️</span> Real-Time Geospatial Intelligence
+      </div>
+      <h1 style="font-size: 2rem; font-weight: 800; color: #ffffff; letter-spacing: -0.03em; margin-bottom: 0.25rem;">
         Interactive Live Risk Map
       </h1>
       <p style="color: var(--text-secondary); font-size: 0.95rem;">
-        Explore geolocated road hazards and dynamically calculated Road Risk Scores across the city.
+        Explore citywide hazard telemetry and real-time Road Risk Scores computed by our Python engine.
       </p>
     </div>
-    <div style="display: flex; gap: 0.5rem; align-items: center;">
-      <span style="font-size: 0.85rem; color: var(--text-secondary);">Showing: <strong id="reports-count-label">Loading...</strong> reports</span>
-      <a href="{{ url_for('report_hazard') }}" class="btn btn-primary btn-sm">＋ Pin New Hazard</a>
+    <div style="display: flex; gap: 0.75rem; align-items: center;">
+      <span style="font-size: 0.85rem; color: var(--text-muted); background: rgba(255,255,255,0.04); padding: 0.4rem 0.85rem; border-radius: var(--radius-full); border: 1px solid var(--border-subtle); font-family: var(--font-mono);">
+        Live Signals: <strong id="reports-count-label" style="color: var(--color-cyan);">...</strong>
+      </span>
+      <a href="{{ url_for('report_hazard') }}" class="btn btn-primary btn-sm">⚡ Pin Hazard</a>
     </div>
   </div>
 
   <div class="map-page-layout">
     <!-- Filter Sidebar -->
     <aside class="map-sidebar">
-      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; padding-bottom: 0.5rem; border-bottom: 1px solid var(--border-color);">
-        <h2 style="font-size: 1rem; font-weight: 700; color: var(--text-primary);">Filter Hazards</h2>
-        <button id="btn-reset-filters" class="btn btn-secondary btn-sm" style="padding: 0.2rem 0.5rem; font-size: 0.78rem;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem; padding-bottom: 0.75rem; border-bottom: 1px solid var(--border-subtle);">
+        <h2 style="font-size: 1rem; font-weight: 700; color: #ffffff;">Filter Intel</h2>
+        <button id="btn-reset-filters" class="btn btn-secondary btn-sm" style="padding: 0.25rem 0.65rem; font-size: 0.78rem;">
           Reset
         </button>
       </div>
@@ -65,32 +70,32 @@
       </div>
 
       <!-- Risk Legend -->
-      <div style="margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid var(--border-color);">
-        <div style="font-size: 0.82rem; font-weight: 700; color: var(--text-primary); margin-bottom: 0.65rem;">
-          RISK CLASSIFICATION LEGEND
+      <div style="margin-top: 1.75rem; padding-top: 1.25rem; border-top: 1px solid var(--border-subtle);">
+        <div style="font-size: 0.8rem; font-weight: 700; color: #cbd5e1; margin-bottom: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em; font-family: var(--font-mono);">
+          Risk Score Hierarchy
         </div>
-        <div style="display: flex; flex-direction: column; gap: 0.5rem; font-size: 0.8rem;">
-          <div style="display: flex; align-items: center; gap: 0.5rem;">
-            <span style="width: 14px; height: 14px; border-radius: 50%; background: var(--risk-critical); display: inline-block;"></span>
-            <span><strong>Critical Risk (75–100)</strong></span>
+        <div style="display: flex; flex-direction: column; gap: 0.65rem; font-size: 0.82rem;">
+          <div style="display: flex; align-items: center; gap: 0.65rem;">
+            <span style="width: 12px; height: 12px; border-radius: 50%; background: var(--risk-critical); box-shadow: 0 0 10px var(--risk-critical); display: inline-block;"></span>
+            <span style="color: #f8fafc;"><strong>Critical (75–100)</strong></span>
           </div>
-          <div style="display: flex; align-items: center; gap: 0.5rem;">
-            <span style="width: 14px; height: 14px; border-radius: 50%; background: var(--risk-high); display: inline-block;"></span>
-            <span><strong>High Risk (50–74)</strong></span>
+          <div style="display: flex; align-items: center; gap: 0.65rem;">
+            <span style="width: 12px; height: 12px; border-radius: 50%; background: var(--risk-high); box-shadow: 0 0 10px var(--risk-high); display: inline-block;"></span>
+            <span style="color: #f8fafc;"><strong>High (50–74)</strong></span>
           </div>
-          <div style="display: flex; align-items: center; gap: 0.5rem;">
-            <span style="width: 14px; height: 14px; border-radius: 50%; background: var(--risk-medium); display: inline-block;"></span>
-            <span><strong>Medium Risk (25–49)</strong></span>
+          <div style="display: flex; align-items: center; gap: 0.65rem;">
+            <span style="width: 12px; height: 12px; border-radius: 50%; background: var(--risk-medium); box-shadow: 0 0 10px var(--risk-medium); display: inline-block;"></span>
+            <span style="color: #f8fafc;"><strong>Medium (25–49)</strong></span>
           </div>
-          <div style="display: flex; align-items: center; gap: 0.5rem;">
-            <span style="width: 14px; height: 14px; border-radius: 50%; background: var(--risk-low); display: inline-block;"></span>
-            <span><strong>Low Risk (0–24)</strong></span>
+          <div style="display: flex; align-items: center; gap: 0.65rem;">
+            <span style="width: 12px; height: 12px; border-radius: 50%; background: var(--risk-low); box-shadow: 0 0 10px var(--risk-low); display: inline-block;"></span>
+            <span style="color: #f8fafc;"><strong>Low (0–24)</strong></span>
           </div>
         </div>
       </div>
 
-      <div style="margin-top: 1.5rem; background: var(--bg-subtle); padding: 0.75rem; border-radius: var(--radius-sm); font-size: 0.78rem; color: var(--text-secondary);">
-        💡 <strong>Pro Tip:</strong> Click any map pin to view incident details, community recency score, and investigation timeline.
+      <div style="margin-top: 1.5rem; background: rgba(99, 102, 241, 0.08); border: 1px solid rgba(99, 102, 241, 0.25); padding: 0.85rem; border-radius: var(--radius-sm); font-size: 0.8rem; color: #c7d2fe;">
+        ⚡ <strong>Pro Tip:</strong> Click any glowing marker pin to inspect the underlying recurrence algorithm and local recency factors.
       </div>
     </aside>
 
@@ -99,11 +104,11 @@
       <div id="map"></div>
       
       <!-- Empty State Overlay -->
-      <div id="map-empty-state" style="display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 500; background: rgba(255,255,255,0.95); padding: 2rem; border-radius: var(--radius-md); text-align: center; box-shadow: var(--shadow-lg); border: 1px solid var(--border-color); max-width: 320px;">
+      <div id="map-empty-state" style="display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 500; background: rgba(15, 23, 42, 0.95); padding: 2rem; border-radius: var(--radius-md); text-align: center; box-shadow: var(--shadow-card); border: 1px solid var(--border-subtle); max-width: 320px; backdrop-filter: blur(14px);">
         <div style="font-size: 2rem; margin-bottom: 0.5rem;">🔍</div>
-        <h3 style="font-size: 1.1rem; color: var(--text-primary); margin-bottom: 0.25rem;">No Hazards Match</h3>
-        <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 1rem;">
-          No reports match the current filter selection. Try resetting filters or adding a new report.
+        <h3 style="font-size: 1.15rem; color: #ffffff; margin-bottom: 0.35rem; font-weight: 700;">No Hazards Match</h3>
+        <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 1.25rem;">
+          No reports match the selected criteria. Reset filters or contribute a new report.
         </p>
         <button id="btn-empty-reset" class="btn btn-primary btn-sm">Reset Filters</button>
       </div>

@@ -3,21 +3,24 @@
 {% block title %}Report a Road Hazard — RoadPulse{% endblock %}
 
 {% block content %}
-<div class="container" style="max-width: 1000px;">
-  <div style="margin-bottom: 1.5rem;">
-    <h1 style="font-size: 1.85rem; font-weight: 800; color: var(--text-primary); margin-bottom: 0.35rem;">
+<div class="container" style="max-width: 1040px;">
+  <div style="margin-bottom: 2rem;">
+    <div class="hero-pill" style="margin-bottom: 0.5rem;">
+      <span>⚡</span> Community Hazard Reporting
+    </div>
+    <h1 style="font-size: 2rem; font-weight: 800; color: #ffffff; letter-spacing: -0.03em; margin-bottom: 0.35rem;">
       Report a Road Hazard
     </h1>
     <p style="color: var(--text-secondary); font-size: 0.95rem;">
-      Help road users and civic authorities identify danger zones. Click the map to drop a pin or enter coordinates manually.
+      Crowdsource road safety intelligence. Click the interactive map to drop coordinates automatically.
     </p>
   </div>
 
-  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;" class="report-grid">
+  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.75rem;" class="report-grid">
     <!-- Form Card -->
     <div class="card">
       <div class="card-header">
-        <h2 class="card-title">Hazard Information</h2>
+        <h2 class="card-title">Hazard Telemetry</h2>
         <span class="badge badge-medium">Public Submission</span>
       </div>
 
@@ -48,15 +51,15 @@
             <select class="form-control" id="severity" name="severity" required>
               <option value="" disabled {% if not form_data.get('severity') %}selected{% endif %}>Select severity...</option>
               <option value="Low" {% if form_data.get('severity') == 'Low' %}selected{% endif %}>Low (Minor wear / Cosmetic)</option>
-              <option value="Medium" {% if form_data.get('severity') == 'Medium' %}selected{% endif %}>Medium (Slow traffic / Minor hazard)</option>
+              <option value="Medium" {% if form_data.get('severity') == 'Medium' %}selected{% endif %}>Medium (Traffic slowdown)</option>
               <option value="High" {% if form_data.get('severity') == 'High' %}selected{% endif %}>High (Vehicle damage risk)</option>
-              <option value="Critical" {% if form_data.get('severity') == 'Critical' %}selected{% endif %}>Critical (Severe safety/life hazard)</option>
+              <option value="Critical" {% if form_data.get('severity') == 'Critical' %}selected{% endif %}>Critical (Severe safety danger)</option>
             </select>
           </div>
         </div>
 
         <div class="form-group">
-          <label class="form-label" for="location_name">Location Landmark / Street Name *</label>
+          <label class="form-label" for="location_name">Location Landmark / Street *</label>
           <input type="text" class="form-control" id="location_name" name="location_name" required
                  placeholder="e.g. Hitec City Main Road, near Pillar 12"
                  value="{{ form_data.get('location_name', '') }}">
@@ -65,7 +68,7 @@
         <div class="form-group">
           <label class="form-label" for="description">Detailed Description *</label>
           <textarea class="form-control" id="description" name="description" rows="3" required
-                    placeholder="Describe size, road conditions, visibility or obstruction details...">{{ form_data.get('description', '') }}</textarea>
+                    placeholder="Describe size, depth, night visibility, or traffic risk...">{{ form_data.get('description', '') }}</textarea>
         </div>
 
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
@@ -82,7 +85,7 @@
         </div>
 
         <button type="submit" class="btn btn-primary" id="btn-submit-report" style="width: 100%; margin-top: 0.5rem;">
-          🚀 Submit Road Hazard Report
+          ⚡ Submit Hazard &amp; Calculate Risk Score
         </button>
       </form>
     </div>
@@ -90,17 +93,17 @@
     <!-- Map Pinning Helper Card -->
     <div class="card" style="display: flex; flex-direction: column;">
       <div class="card-header">
-        <h2 class="card-title">Pinpoint on Map</h2>
-        <span style="font-size: 0.78rem; color: var(--text-muted);">Click anywhere to move pin</span>
+        <h2 class="card-title">Pinpoint on Cyber Map</h2>
+        <span style="font-size: 0.78rem; color: var(--color-cyan); font-family: var(--font-mono);">Click to set location</span>
       </div>
-      <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 0.75rem;">
-        Coordinates will automatically populate in the form. Initial view centered around Hyderabad, India.
+      <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 0.85rem;">
+        Coordinates synchronize live with form inputs. Drag or click pin to recalibrate.
       </p>
-      <div style="flex: 1; min-height: 380px; border-radius: var(--radius-sm); overflow: hidden; border: 1px solid var(--border-color); position: relative;">
+      <div style="flex: 1; min-height: 400px; border-radius: var(--radius-sm); overflow: hidden; border: 1px solid var(--border-subtle); position: relative;">
         <div id="picker-map" style="width: 100%; height: 100%;"></div>
       </div>
-      <div style="margin-top: 0.75rem; font-size: 0.78rem; color: var(--text-muted); display: flex; align-items: center; gap: 0.4rem;">
-        <span>ℹ️</span> Zero-cost OpenStreetMap tiles used in compliance with OSM usage policy.
+      <div style="margin-top: 0.85rem; font-size: 0.78rem; color: var(--text-muted); display: flex; align-items: center; gap: 0.4rem;">
+        <span>🌐</span> Zero-cost OpenStreetMap tiles with custom cyber dark styling.
       </div>
     </div>
   </div>
@@ -117,10 +120,17 @@
     const map = L.map('picker-map').setView([defaultLat, defaultLng], 13);
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       maxZoom: 19,
-      attribution: '&copy; <a href="https://openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+      attribution: '&copy; OpenStreetMap'
     }).addTo(map);
 
-    let marker = L.marker([defaultLat, defaultLng], { draggable: true }).addTo(map);
+    const pinIcon = L.divIcon({
+      className: 'custom-leaflet-marker',
+      html: `<div class="custom-pin pin-critical"></div>`,
+      iconSize: [26, 26],
+      iconAnchor: [13, 26]
+    });
+
+    let marker = L.marker([defaultLat, defaultLng], { draggable: true, icon: pinIcon }).addTo(map);
 
     function updateInputs(lat, lng) {
       document.getElementById('latitude').value = lat.toFixed(6);
@@ -137,12 +147,11 @@
       updateInputs(pos.lat, pos.lng);
     });
 
-    // Prevent duplicate accidental double submissions
     const form = document.getElementById('hazard-report-form');
     const submitBtn = document.getElementById('btn-submit-report');
     form.addEventListener('submit', function() {
       submitBtn.disabled = true;
-      submitBtn.innerText = 'Submitting & Computing Risk...';
+      submitBtn.innerText = 'Calculating Risk & Submitting...';
     });
   });
 </script>

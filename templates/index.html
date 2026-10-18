@@ -3,15 +3,18 @@
 {% block title %}RoadPulse — Roads That Speak. Communities That Act.{% endblock %}
 
 {% block content %}
-<!-- Hero Section -->
+<!-- Gen-Z Cyber Hero Section -->
 <section class="hero-section">
   <div class="container">
     <div class="hero-pill">
-      <span>🛡️</span> Zero-Cost Citizen Road Safety Intelligence
+      <span>⚡</span> Zero-Cost Citizen Road Safety Intelligence
     </div>
-    <h1 class="hero-title">Roads That Speak.<br>Communities That Act.</h1>
+    <h1 class="hero-title">
+      Roads That <span class="gradient-text">Speak.</span><br>
+      Communities That <span class="gradient-text">Act.</span>
+    </h1>
     <p class="hero-subtitle">
-      Report road hazards, discover recurring safety problems, and help make every journey safer through open citizen data and automated risk scoring.
+      Empowering citizens to report road hazards, expose recurring bottlenecks, and safeguard daily journeys with automated Python risk triage.
     </p>
     <div class="hero-actions">
       <a href="{{ url_for('report_hazard') }}" class="btn btn-primary" id="hero-btn-report">
@@ -25,7 +28,7 @@
 </section>
 
 <div class="container">
-  <!-- Statistics Cards -->
+  <!-- Glowing Stats Grid -->
   <div class="stats-grid">
     <div class="stat-card">
       <div class="stat-icon blue">📊</div>
@@ -57,27 +60,27 @@
     </div>
   </div>
 
-  <!-- How It Works Section -->
+  <!-- How It Works Section (Glass Cards) -->
   <div class="card" style="margin-bottom: 2.5rem;">
     <div class="card-header">
-      <h2 class="card-title">How RoadPulse Works in 3 Steps</h2>
+      <h2 class="card-title">How RoadPulse Operates</h2>
       <span class="badge badge-low">Automated Triage</span>
     </div>
     <div class="steps-grid">
       <div class="step-card">
-        <div class="step-number">1</div>
-        <h3>Report a Road Hazard</h3>
-        <p>Citizens pinpoint potholes, broken streetlights, or dangerous spots with exact GPS coordinates and description.</p>
+        <div class="step-number">01</div>
+        <h3>Report a Hazard</h3>
+        <p>Citizens pinpoint potholes, unlit roads, or dangerous junctions with precise GPS coordinates and severity context.</p>
       </div>
       <div class="step-card">
-        <div class="step-number">2</div>
-        <h3>Analyze Risk Score</h3>
-        <p>Our Python engine calculates a Road Risk Score balancing incident severity (50%), recurring complaints (30%), and recency (20%).</p>
+        <div class="step-number">02</div>
+        <h3>Compute Risk Score</h3>
+        <p>Our Python engine balances severity weight (50%), spatial recurrence clusters (30%), and time decay (20%).</p>
       </div>
       <div class="step-card">
-        <div class="step-number">3</div>
-        <h3>Identify Problem Areas</h3>
-        <p>Interactive heatmaps and cluster analytics highlight recurring bottlenecks so community action can focus on urgent zones first.</p>
+        <div class="step-number">03</div>
+        <h3>Targeted Community Action</h3>
+        <p>Live heatmaps spotlight recurring bottlenecks so civic focus and community resources hit urgent danger spots first.</p>
       </div>
     </div>
   </div>
@@ -87,11 +90,11 @@
     <div class="card-header">
       <div>
         <h2 class="card-title">Recent Community Reports</h2>
-        <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.2rem;">
-          Latest submissions prioritized by calculated Road Risk Score (Sample demonstration data labeled)
+        <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.25rem;">
+          Live incident queue sorted by computed Road Risk Score (Demonstration sample data labeled)
         </p>
       </div>
-      <a href="{{ url_for('live_map') }}" class="btn btn-secondary btn-sm">View Full Map →</a>
+      <a href="{{ url_for('live_map') }}" class="btn btn-secondary btn-sm">Explore Map →</a>
     </div>
 
     <div class="table-responsive">
@@ -112,13 +115,13 @@
             {% for rep in recent_reports %}
             <tr>
               <td>
-                <div style="font-weight: 600; color: var(--text-primary);">{{ rep.title }}</div>
+                <div style="font-weight: 700; color: #ffffff;">{{ rep.title }}</div>
                 {% if rep.is_sample %}
-                  <span style="font-size: 0.72rem; color: #64748b; background: #f1f5f9; padding: 2px 6px; border-radius: 4px;">Sample Data</span>
+                  <span style="font-size: 0.68rem; color: #94a3b8; background: rgba(255,255,255,0.06); padding: 2px 6px; border-radius: 4px; border: 1px solid rgba(255,255,255,0.08); font-family: var(--font-mono);">Sample Data</span>
                 {% endif %}
               </td>
-              <td><span style="font-weight: 500;">{{ rep.category }}</span></td>
-              <td style="color: var(--text-secondary); max-width: 200px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+              <td><span style="font-weight: 600; color: #38bdf8;">{{ rep.category }}</span></td>
+              <td style="color: var(--text-secondary); max-width: 220px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
                 📍 {{ rep.location_name }}
               </td>
               <td>
@@ -133,9 +136,9 @@
                 {% endif %}
               </td>
               <td>
-                <div style="display: flex; align-items: center; gap: 0.5rem;">
-                  <strong style="font-size: 1.05rem;">{{ rep.road_risk_score }}</strong>
-                  <span style="font-size: 0.8rem; color: var(--text-muted);">/100</span>
+                <div style="display: flex; align-items: baseline; gap: 0.35rem; font-family: var(--font-mono);">
+                  <strong style="font-size: 1.15rem; color: #ffffff;">{{ rep.road_risk_score }}</strong>
+                  <span style="font-size: 0.75rem; color: var(--text-muted);">/100</span>
                 </div>
               </td>
               <td>
@@ -145,15 +148,15 @@
               </td>
               <td>
                 <a href="{{ url_for('report_details', report_id=rep.id) }}" class="btn btn-secondary btn-sm">
-                  Details
+                  Intel →
                 </a>
               </td>
             </tr>
             {% endfor %}
           {% else %}
             <tr>
-              <td colspan="7" style="text-align: center; padding: 2rem; color: var(--text-muted);">
-                No hazard reports found in database. Be the first to report!
+              <td colspan="7" style="text-align: center; padding: 2.5rem; color: var(--text-muted);">
+                No hazards recorded yet. Be the first to submit a report!
               </td>
             </tr>
           {% endif %}

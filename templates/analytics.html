@@ -3,21 +3,20 @@
 {% block title %}Road Safety Analytics — RoadPulse{% endblock %}
 
 {% block extra_head %}
-<!-- Chart.js for data visualization -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 {% endblock %}
 
 {% block content %}
 <div class="container">
-  <div style="margin-bottom: 2rem;">
+  <div style="margin-bottom: 2.25rem;">
     <div class="hero-pill" style="margin-bottom: 0.5rem;">
       <span>📈</span> Citywide Incident Analytics
     </div>
-    <h1 style="font-size: 1.85rem; font-weight: 800; color: var(--text-primary); margin-bottom: 0.25rem;">
+    <h1 style="font-size: 2rem; font-weight: 800; color: #ffffff; letter-spacing: -0.03em; margin-bottom: 0.35rem;">
       Road Safety Analytics &amp; Problem Clustering
     </h1>
     <p style="color: var(--text-secondary); font-size: 0.95rem;">
-      Aggregated metrics powered by Chart.js showing category distribution, severity breakdown, and high-frequency incident hotspots.
+      Real-time telemetry aggregated by our backend showing hazard distribution and top recurring complaint hotspots.
     </p>
   </div>
 
@@ -53,7 +52,7 @@
   </div>
 
   <!-- Hotspots & Top Risk Tables -->
-  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(420px, 1fr)); gap: 1.5rem; margin-top: 1rem;">
+  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(420px, 1fr)); gap: 1.75rem; margin-top: 1rem;">
     <!-- Top 5 Recurring Locations -->
     <div class="card">
       <div class="card-header">
@@ -75,9 +74,9 @@
           <tbody>
             {% for item in stats.top_recurring_locations %}
             <tr>
-              <td style="font-weight: 600;">📍 {{ item.location_name }}</td>
-              <td><span class="badge badge-status" style="font-size: 0.85rem;">{{ item.report_count }} reports</span></td>
-              <td><strong>{{ "%.1f"|format(item.avg_risk) }} / 100</strong></td>
+              <td style="font-weight: 700; color: #ffffff;">📍 {{ item.location_name }}</td>
+              <td><span class="badge badge-status" style="font-size: 0.8rem;">{{ item.report_count }} reports</span></td>
+              <td><strong style="color: var(--color-cyan); font-family: var(--font-mono); font-size: 1rem;">{{ "%.1f"|format(item.avg_risk) }} / 100</strong></td>
             </tr>
             {% else %}
             <tr>
@@ -112,7 +111,7 @@
             {% for item in stats.top_highest_risk %}
             <tr>
               <td>
-                <div style="font-weight: 600;">{{ item.title }}</div>
+                <div style="font-weight: 700; color: #ffffff;">{{ item.title }}</div>
                 <div style="font-size: 0.8rem; color: var(--text-secondary);">{{ item.location_name }}</div>
               </td>
               <td>
@@ -124,8 +123,8 @@
                   <span class="badge badge-medium">{{ item.severity }}</span>
                 {% endif %}
               </td>
-              <td><strong style="font-size: 1.05rem;">{{ item.road_risk_score }}</strong></td>
-              <td><a href="{{ url_for('report_details', report_id=item.id) }}" class="btn btn-secondary btn-sm">View</a></td>
+              <td><strong style="font-size: 1.15rem; color: #ffffff; font-family: var(--font-mono);">{{ item.road_risk_score }}</strong></td>
+              <td><a href="{{ url_for('report_details', report_id=item.id) }}" class="btn btn-secondary btn-sm">Intel →</a></td>
             </tr>
             {% else %}
             <tr>

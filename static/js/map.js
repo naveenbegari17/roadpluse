@@ -1,24 +1,22 @@
 /**
- * RoadPulse Map Controller
- * Loads hazards from Flask backend /api/reports, renders color-coded risk markers,
- * handles filter changes, and shows detailed popups.
+ * RoadPulse Gen-Z Dark Mode Leaflet Map Controller
+ * Renders glowing custom pins, sleek dark popups, and handles interactive filters.
  */
 
 document.addEventListener('DOMContentLoaded', function() {
   const mapElement = document.getElementById('map');
   if (!mapElement) return;
 
-  // Initial center around Hyderabad, India per specification
   const initialLat = 17.4435;
   const initialLng = 78.3772;
   const initialZoom = 12;
 
   const map = L.map('map').setView([initialLat, initialLng], initialZoom);
 
-  // Free OpenStreetMap tile layer
+  // Free OpenStreetMap tile layer (styled to dark cyber theme via CSS filter)
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     maxZoom: 19,
-    attribution: '&copy; <a href="https://openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    attribution: '&copy; <a href="https://openstreetmap.org/copyright" style="color:#38bdf8;">OpenStreetMap</a> contributors'
   }).addTo(map);
 
   let markersLayer = L.layerGroup().addTo(map);
@@ -31,15 +29,15 @@ document.addEventListener('DOMContentLoaded', function() {
   const countLabel = document.getElementById('reports-count-label');
   const emptyState = document.getElementById('map-empty-state');
 
-  // Custom colored divIcon maker based on risk classification
+  // Custom glowing neon pin
   function createCustomMarker(riskClassification) {
     const cls = (riskClassification || 'low').toLowerCase();
     return L.divIcon({
       className: 'custom-leaflet-marker',
       html: `<div class="custom-pin pin-${cls}"></div>`,
-      iconSize: [24, 24],
-      iconAnchor: [12, 24],
-      popupAnchor: [0, -22]
+      iconSize: [26, 26],
+      iconAnchor: [13, 26],
+      popupAnchor: [0, -24]
     });
   }
 
@@ -52,10 +50,7 @@ document.addEventListener('DOMContentLoaded', function() {
     fetch(`/api/reports?${params.toString()}`)
       .then(res => res.json())
       .then(response => {
-        if (response.status !== 'success') {
-          console.error("API response error:", response);
-          return;
-        }
+        if (response.status !== 'success') return;
 
         markersLayer.clearLayers();
         const reports = response.data;
@@ -79,27 +74,27 @@ document.addEventListener('DOMContentLoaded', function() {
           const marker = L.marker([lat, lng], { icon: markerIcon });
 
           const badgeClass = `badge-${(report.risk_classification || 'low').toLowerCase()}`;
-          const sampleLabel = report.is_sample ? `<span style="font-size: 0.7rem; background:#f1f5f9; padding:2px 5px; border-radius:3px; color:#64748b;">Sample</span>` : '';
+          const sampleLabel = report.is_sample ? `<span style="font-size:0.68rem; background:rgba(255,255,255,0.06); padding:2px 6px; border-radius:4px; color:#94a3b8; border:1px solid rgba(255,255,255,0.08);">Sample</span>` : '';
 
           const popupContent = `
-            <div style="min-width: 220px; font-family: inherit;">
-              <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:0.5rem; margin-bottom: 0.35rem;">
-                <span class="badge ${badgeClass}" style="font-size:0.7rem;">${report.risk_classification} Risk (${report.road_risk_score}/100)</span>
+            <div style="min-width: 230px; font-family: 'Plus Jakarta Sans', sans-serif;">
+              <div style="display:flex; justify-content:space-between; align-items:center; gap:0.5rem; margin-bottom: 0.5rem;">
+                <span class="badge ${badgeClass}" style="font-size:0.7rem;">${report.risk_classification} Priority (${report.road_risk_score}/100)</span>
                 ${sampleLabel}
               </div>
-              <h4 style="font-size: 0.95rem; font-weight:700; margin-bottom: 0.25rem; color: #0f172a;">${report.title}</h4>
-              <div style="font-size: 0.8rem; color: #475569; margin-bottom: 0.4rem;">
-                <strong>Category:</strong> ${report.category} | <strong>Severity:</strong> ${report.severity}
+              <h4 style="font-size: 1rem; font-weight:800; margin-bottom: 0.35rem; color: #ffffff;">${report.title}</h4>
+              <div style="font-size: 0.8rem; color: #94a3b8; margin-bottom: 0.45rem;">
+                <strong>Category:</strong> <span style="color:#38bdf8;">${report.category}</span> | <strong>Severity:</strong> ${report.severity}
               </div>
-              <div style="font-size: 0.8rem; color: #64748b; margin-bottom: 0.6rem;">
+              <div style="font-size: 0.8rem; color: #cbd5e1; margin-bottom: 0.65rem;">
                 📍 ${report.location_name}
               </div>
-              <div style="font-size: 0.78rem; background: #f8fafc; padding: 0.4rem; border-radius: 4px; margin-bottom: 0.6rem; border: 1px solid #e2e8f0;">
+              <div style="font-size: 0.78rem; background: rgba(0,0,0,0.3); padding: 0.5rem 0.65rem; border-radius: 8px; margin-bottom: 0.75rem; border: 1px solid rgba(255,255,255,0.06); color: #cbd5e1;">
                 <em>"${report.risk_explanation || 'Experimental prioritization score.'}"</em>
               </div>
-              <div style="display:flex; justify-content:space-between; align-items:center;">
-                <span style="font-size: 0.75rem; color: #94a3b8;">Status: <strong>${report.status}</strong></span>
-                <a href="/report/${report.id}" style="color: #2563eb; font-size: 0.8rem; font-weight:600; text-decoration:none;">Details →</a>
+              <div style="display:flex; justify-content:space-between; align-items:center; border-top:1px solid rgba(255,255,255,0.08); padding-top:0.5rem;">
+                <span style="font-size: 0.75rem; color: #64748b;">Status: <strong style="color:#e2e8f0;">${report.status}</strong></span>
+                <a href="/report/${report.id}" style="color: #38bdf8; font-size: 0.82rem; font-weight:700; text-decoration:none;">View Intel →</a>
               </div>
             </div>
           `;
@@ -108,7 +103,6 @@ document.addEventListener('DOMContentLoaded', function() {
           markersLayer.addLayer(marker);
         });
 
-        // Fit map bounds if markers exist
         if (latLngBounds.length > 0) {
           map.fitBounds(latLngBounds, { padding: [40, 40], maxZoom: 14 });
         }
@@ -133,6 +127,5 @@ document.addEventListener('DOMContentLoaded', function() {
   resetBtn.addEventListener('click', resetAllFilters);
   if (emptyResetBtn) emptyResetBtn.addEventListener('click', resetAllFilters);
 
-  // Initial load
   fetchAndRenderReports();
 });

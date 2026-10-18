@@ -1,16 +1,21 @@
 /**
- * RoadPulse Chart.js Analytics Controller
- * Fetches JSON metrics from /api/analytics and renders responsive, color-coordinated charts.
+ * RoadPulse Gen-Z Dark Mode Chart.js Analytics Controller
+ * Renders glowing neon charts calibrated for OLED dark backgrounds.
  */
 
 document.addEventListener('DOMContentLoaded', function() {
+  // Global Chart.js dark mode defaults
+  Chart.defaults.color = '#94a3b8';
+  Chart.defaults.font.family = "'Plus Jakarta Sans', sans-serif";
+  Chart.defaults.borderColor = 'rgba(255, 255, 255, 0.08)';
+
   fetch('/api/analytics')
     .then(res => res.json())
     .then(response => {
       if (response.status !== 'success') return;
       const data = response.data;
 
-      // 1. Categories Chart (Doughnut)
+      // 1. Categories Chart (Gen-Z Neon Doughnut)
       const catCtx = document.getElementById('chart-categories');
       if (catCtx) {
         const catLabels = data.categories.map(c => c.category);
@@ -21,30 +26,46 @@ document.addEventListener('DOMContentLoaded', function() {
             labels: catLabels,
             datasets: [{
               data: catCounts,
-              backgroundColor: ['#2563eb', '#38bdf8', '#f59e0b', '#dc2626', '#10b981', '#64748b'],
+              backgroundColor: [
+                '#6366f1', // Electric Indigo
+                '#06b6d4', // Cyber Cyan
+                '#facc15', // Laser Gold
+                '#ff3366', // Neon Crimson
+                '#10b981', // Neon Emerald
+                '#a855f7'  // Neon Purple
+              ],
               borderWidth: 2,
-              borderColor: '#ffffff'
+              borderColor: '#0f172a',
+              hoverOffset: 6
             }]
           },
           options: {
             responsive: true,
             maintainAspectRatio: false,
             plugins: {
-              legend: { position: 'bottom', labels: { boxWidth: 12, font: { size: 11 } } }
+              legend: {
+                position: 'bottom',
+                labels: {
+                  boxWidth: 12,
+                  padding: 15,
+                  font: { size: 11, weight: '600' },
+                  color: '#cbd5e1'
+                }
+              }
             }
           }
         });
       }
 
-      // 2. Severity Chart (Bar)
+      // 2. Severity Chart (Neon Vertical Bars)
       const sevCtx = document.getElementById('chart-severities');
       if (sevCtx) {
         const sevOrder = ['Low', 'Medium', 'High', 'Critical'];
         const sevColors = {
-          'Low': '#16a34a',
-          'Medium': '#d97706',
-          'High': '#ea580c',
-          'Critical': '#dc2626'
+          'Low': '#10b981',
+          'Medium': '#facc15',
+          'High': '#ff8c00',
+          'Critical': '#ff3366'
         };
 
         const sevMap = {};
@@ -60,25 +81,37 @@ document.addEventListener('DOMContentLoaded', function() {
               label: 'Report Count',
               data: sevOrder.map(sev => sevMap[sev] || 0),
               backgroundColor: sevOrder.map(sev => sevColors[sev]),
-              borderRadius: 6
+              borderRadius: 8,
+              borderWidth: 1,
+              borderColor: sevOrder.map(sev => sevColors[sev])
             }]
           },
           options: {
             responsive: true,
             maintainAspectRatio: false,
-            plugins: { legend: { display: false } },
+            plugins: {
+              legend: { display: false }
+            },
             scales: {
-              y: { beginAtZero: true, ticks: { precision: 0 } }
+              x: {
+                grid: { display: false },
+                ticks: { color: '#94a3b8', font: { weight: '600' } }
+              },
+              y: {
+                beginAtZero: true,
+                grid: { color: 'rgba(255, 255, 255, 0.05)' },
+                ticks: { precision: 0, color: '#94a3b8' }
+              }
             }
           }
         });
       }
 
-      // 3. Risk Distribution Chart (Polar Area or Bar)
+      // 3. Risk Distribution Chart
       const riskCtx = document.getElementById('chart-risk-dist');
       if (riskCtx) {
         const riskLevels = ['Low', 'Medium', 'High', 'Critical'];
-        const riskColors = ['#16a34a', '#d97706', '#ea580c', '#dc2626'];
+        const riskColors = ['#10b981', '#facc15', '#ff8c00', '#ff3366'];
         const riskMap = {};
         data.risk_distribution.forEach(r => {
           riskMap[r.risk_classification] = r.count;
@@ -92,7 +125,9 @@ document.addEventListener('DOMContentLoaded', function() {
               label: 'Incidents in Range',
               data: riskLevels.map(lvl => riskMap[lvl] || 0),
               backgroundColor: riskColors,
-              borderRadius: 6
+              borderRadius: 8,
+              borderWidth: 1,
+              borderColor: riskColors
             }]
           },
           options: {
@@ -100,13 +135,21 @@ document.addEventListener('DOMContentLoaded', function() {
             maintainAspectRatio: false,
             plugins: { legend: { display: false } },
             scales: {
-              y: { beginAtZero: true, ticks: { precision: 0 } }
+              x: {
+                grid: { display: false },
+                ticks: { color: '#94a3b8', font: { weight: '600' } }
+              },
+              y: {
+                beginAtZero: true,
+                grid: { color: 'rgba(255, 255, 255, 0.05)' },
+                ticks: { precision: 0, color: '#94a3b8' }
+              }
             }
           }
         });
       }
 
-      // 4. Status Breakdown Chart (Pie)
+      // 4. Status Breakdown Chart
       const statusCtx = document.getElementById('chart-statuses');
       if (statusCtx) {
         const statusLabels = data.statuses.map(s => s.status);
@@ -117,16 +160,24 @@ document.addEventListener('DOMContentLoaded', function() {
             labels: statusLabels,
             datasets: [{
               data: statusCounts,
-              backgroundColor: ['#64748b', '#3b82f6', '#f59e0b', '#10b981'],
+              backgroundColor: ['#64748b', '#38bdf8', '#facc15', '#10b981'],
               borderWidth: 2,
-              borderColor: '#ffffff'
+              borderColor: '#0f172a'
             }]
           },
           options: {
             responsive: true,
             maintainAspectRatio: false,
             plugins: {
-              legend: { position: 'bottom', labels: { boxWidth: 12, font: { size: 11 } } }
+              legend: {
+                position: 'bottom',
+                labels: {
+                  boxWidth: 12,
+                  padding: 15,
+                  font: { size: 11, weight: '600' },
+                  color: '#cbd5e1'
+                }
+              }
             }
           }
         });

@@ -4,29 +4,29 @@
 
 {% block content %}
 <div class="container">
-  <div style="margin-bottom: 2rem;">
+  <div style="margin-bottom: 2.25rem;">
     <div class="hero-pill" style="margin-bottom: 0.5rem;">
       <span>☁️</span> Zero-Cost Educational Learning Blueprint
     </div>
-    <h1 style="font-size: 1.85rem; font-weight: 800; color: var(--text-primary); margin-bottom: 0.25rem;">
+    <h1 style="font-size: 2rem; font-weight: 800; color: #ffffff; letter-spacing: -0.03em; margin-bottom: 0.35rem;">
       AWS Cloud Architecture &amp; Scalability Roadmap
     </h1>
     <p style="color: var(--text-secondary); font-size: 0.95rem;">
-      Learn how RoadPulse evolves from a zero-cost local Python prototype into a high-scale, serverless cloud architecture on Amazon Web Services.
+      See how RoadPulse scales from a zero-cost Python prototype into an ultra-fast, serverless cloud architecture on Amazon Web Services.
     </p>
   </div>
 
   <!-- Real vs Planned Architecture Comparison Notice -->
-  <div class="card" style="border-left: 4px solid var(--color-brand); margin-bottom: 2rem;">
-    <div style="display: flex; gap: 0.75rem; align-items: flex-start;">
-      <span style="font-size: 1.4rem;">💡</span>
+  <div class="card" style="border-left: 4px solid var(--color-brand); margin-bottom: 2.5rem;">
+    <div style="display: flex; gap: 0.85rem; align-items: flex-start;">
+      <span style="font-size: 1.5rem;">⚡</span>
       <div>
-        <h3 style="font-size: 1rem; font-weight: 700; color: var(--text-primary); margin-bottom: 0.25rem;">
-          First-Year Student Cloud Architecture Transparency
+        <h3 style="font-size: 1.05rem; font-weight: 800; color: #ffffff; margin-bottom: 0.35rem;">
+          Cloud Architecture Transparency
         </h3>
-        <p style="font-size: 0.88rem; color: var(--text-secondary); line-height: 1.5;">
-          This page explains industry-standard AWS cloud design concepts without requiring any paid subscriptions or credit cards.
-          All services are clearly classified into <strong>Currently Implemented</strong> (Local Python / Vercel serverless), <strong>Demonstration Only</strong>, or <strong>Planned Future Cloud Migration</strong>.
+        <p style="font-size: 0.9rem; color: var(--text-secondary); line-height: 1.6;">
+          This blueprint breaks down real cloud design patterns without requiring AWS credits, credentials, or paid subscriptions.
+          Every component is explicitly labeled as <strong>Currently Implemented</strong> (Local / Vercel Serverless), <strong>Demonstration Only</strong>, or <strong>Planned Future Cloud Migration</strong>.
         </p>
       </div>
     </div>
@@ -37,7 +37,7 @@
     <div class="card-header" style="border-bottom: none; margin-bottom: 0.5rem;">
       <div>
         <h2 class="card-title">1. Current Live Prototype Architecture</h2>
-        <p style="font-size: 0.85rem; color: var(--text-secondary);">
+        <p style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 0.2rem;">
           Zero-cost deployment powered by Python, Flask, SQLite / Free PostgreSQL &amp; OpenStreetMap.
         </p>
       </div>
@@ -47,7 +47,7 @@
     <div class="arch-flow">
       <div class="arch-node active">
         <div class="arch-node-title">Citizen User</div>
-        <div class="arch-node-service">Web / Mobile Browser</div>
+        <div class="arch-node-service">Mobile / Web Browser</div>
       </div>
       <div class="arch-arrow">➔</div>
       <div class="arch-node active">
@@ -76,8 +76,8 @@
     <div class="card-header" style="border-bottom: none; margin-bottom: 0.5rem;">
       <div>
         <h2 class="card-title">2. Target AWS Production Serverless Architecture</h2>
-        <p style="font-size: 0.85rem; color: var(--text-secondary);">
-          Enterprise cloud blueprint designed for millions of citizens, automatic autoscaling, zero idle server cost, and edge caching.
+        <p style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 0.2rem;">
+          Enterprise cloud blueprint designed for automatic scaling to millions of citizens, zero idle costs, and edge caching.
         </p>
       </div>
       <span class="badge badge-high" style="border-style: dashed;">Future Integration</span>
@@ -91,7 +91,7 @@
       <div class="arch-arrow">➔</div>
       <div class="arch-node planned">
         <div class="arch-node-title">CloudFront &amp; S3</div>
-        <div class="arch-node-service">Global CDN &amp; Static Hosting</div>
+        <div class="arch-node-service">Global CDN &amp; Static Edge</div>
       </div>
       <div class="arch-arrow">➔</div>
       <div class="arch-node planned">
@@ -105,7 +105,7 @@
       </div>
       <div class="arch-arrow">➔</div>
       <div class="arch-node planned">
-        <div class="arch-node-title">Amazon Aurora / RDS</div>
+        <div class="arch-node-title">Amazon RDS / Aurora</div>
         <div class="arch-node-service">Serverless PostgreSQL</div>
       </div>
     </div>
@@ -114,110 +114,110 @@
   <!-- Beginner-Friendly AWS Service Breakdown -->
   <div class="card">
     <div class="card-header">
-      <h2 class="card-title">AWS Service Catalog &amp; Beginner Concepts</h2>
+      <h2 class="card-title">AWS Service Catalog &amp; Concepts</h2>
       <span class="badge badge-status">Educational Reference</span>
     </div>
 
     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.5rem;">
       <!-- CloudFront -->
-      <div style="border: 1px solid var(--border-color); border-radius: var(--radius-sm); padding: 1.25rem;">
+      <div style="border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: 1.4rem; background: rgba(15, 23, 42, 0.4);">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
-          <h3 style="font-size: 1.05rem; font-weight: 700; color: var(--text-primary);">Amazon CloudFront</h3>
+          <h3 style="font-size: 1.1rem; font-weight: 800; color: #ffffff;">Amazon CloudFront</h3>
           <span class="badge badge-high" style="font-size: 0.7rem;">Planned</span>
         </div>
-        <p style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.5; margin-bottom: 0.75rem;">
-          <strong>What it is:</strong> A fast Content Delivery Network (CDN) that delivers CSS, JavaScript, and HTML from edge servers located closest to citizens.
+        <p style="font-size: 0.88rem; color: var(--text-secondary); line-height: 1.5; margin-bottom: 0.85rem;">
+          <strong>What it is:</strong> A high-performance Content Delivery Network (CDN) delivering CSS, JavaScript, and HTML from edge locations worldwide.
         </p>
-        <div style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.5rem;">
-          <em>Current Equivalent:</em> Vercel Edge Network / Local Static Asset Serving.
+        <div style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.75rem;">
+          <em>Prototype Equivalent:</em> Vercel Edge Network / Local Static Assets.
         </div>
-        <a href="https://aws.amazon.com/cloudfront/" target="_blank" rel="noopener" style="font-size: 0.8rem; color: var(--color-brand); font-weight: 600; text-decoration: none;">
-          Read Official AWS CloudFront Docs ↗
+        <a href="https://aws.amazon.com/cloudfront/" target="_blank" rel="noopener" style="font-size: 0.82rem; color: var(--color-cyan); font-weight: 700; text-decoration: none;">
+          Read CloudFront Docs ↗
         </a>
       </div>
 
       <!-- API Gateway -->
-      <div style="border: 1px solid var(--border-color); border-radius: var(--radius-sm); padding: 1.25rem;">
+      <div style="border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: 1.4rem; background: rgba(15, 23, 42, 0.4);">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
-          <h3 style="font-size: 1.05rem; font-weight: 700; color: var(--text-primary);">Amazon API Gateway</h3>
+          <h3 style="font-size: 1.1rem; font-weight: 800; color: #ffffff;">Amazon API Gateway</h3>
           <span class="badge badge-high" style="font-size: 0.7rem;">Planned</span>
         </div>
-        <p style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.5; margin-bottom: 0.75rem;">
-          <strong>What it is:</strong> A fully managed service that acts as the "front door" for backend applications, handling rate limiting, authentication, and routing requests to Lambdas.
+        <p style="font-size: 0.88rem; color: var(--text-secondary); line-height: 1.5; margin-bottom: 0.85rem;">
+          <strong>What it is:</strong> Managed entry door handling HTTPS requests, rate limiting, and routing incoming calls directly to serverless Lambdas.
         </p>
-        <div style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.5rem;">
-          <em>Current Equivalent:</em> Flask Route Handlers (<code>@app.route</code>).
+        <div style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.75rem;">
+          <em>Prototype Equivalent:</em> Flask Route Handlers (<code>@app.route</code>).
         </div>
-        <a href="https://aws.amazon.com/api-gateway/" target="_blank" rel="noopener" style="font-size: 0.8rem; color: var(--color-brand); font-weight: 600; text-decoration: none;">
-          Read Official AWS API Gateway Docs ↗
+        <a href="https://aws.amazon.com/api-gateway/" target="_blank" rel="noopener" style="font-size: 0.82rem; color: var(--color-cyan); font-weight: 700; text-decoration: none;">
+          Read API Gateway Docs ↗
         </a>
       </div>
 
       <!-- AWS Lambda -->
-      <div style="border: 1px solid var(--border-color); border-radius: var(--radius-sm); padding: 1.25rem;">
+      <div style="border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: 1.4rem; background: rgba(15, 23, 42, 0.4);">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
-          <h3 style="font-size: 1.05rem; font-weight: 700; color: var(--text-primary);">AWS Lambda</h3>
+          <h3 style="font-size: 1.1rem; font-weight: 800; color: #ffffff;">AWS Lambda</h3>
           <span class="badge badge-high" style="font-size: 0.7rem;">Planned</span>
         </div>
-        <p style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.5; margin-bottom: 0.75rem;">
-          <strong>What it is:</strong> Serverless compute that runs Python code only when a hazard report is submitted. You don't manage or pay for idle servers.
+        <p style="font-size: 0.88rem; color: var(--text-secondary); line-height: 1.5; margin-bottom: 0.85rem;">
+          <strong>What it is:</strong> Event-driven serverless compute running Python hazard risk logic on-demand. Zero idle server fees.
         </p>
-        <div style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.5rem;">
-          <em>Current Equivalent:</em> Vercel Serverless Function (<code>api/index.py</code>).
+        <div style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.75rem;">
+          <em>Prototype Equivalent:</em> Vercel Serverless Function (<code>api/index.py</code>).
         </div>
-        <a href="https://aws.amazon.com/lambda/" target="_blank" rel="noopener" style="font-size: 0.8rem; color: var(--color-brand); font-weight: 600; text-decoration: none;">
-          Read Official AWS Lambda Docs ↗
+        <a href="https://aws.amazon.com/lambda/" target="_blank" rel="noopener" style="font-size: 0.82rem; color: var(--color-cyan); font-weight: 700; text-decoration: none;">
+          Read AWS Lambda Docs ↗
         </a>
       </div>
 
       <!-- Amazon RDS / Aurora -->
-      <div style="border: 1px solid var(--border-color); border-radius: var(--radius-sm); padding: 1.25rem;">
+      <div style="border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: 1.4rem; background: rgba(15, 23, 42, 0.4);">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
-          <h3 style="font-size: 1.05rem; font-weight: 700; color: var(--text-primary);">Amazon RDS (PostgreSQL)</h3>
+          <h3 style="font-size: 1.1rem; font-weight: 800; color: #ffffff;">Amazon RDS (PostgreSQL)</h3>
           <span class="badge badge-high" style="font-size: 0.7rem;">Planned</span>
         </div>
-        <p style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.5; margin-bottom: 0.75rem;">
-          <strong>What it is:</strong> Relational Database Service managing automated backups, replication, and spatial indexing (PostGIS) for millions of geospatial road coordinates.
+        <p style="font-size: 0.88rem; color: var(--text-secondary); line-height: 1.5; margin-bottom: 0.85rem;">
+          <strong>What it is:</strong> Managed relational database service with automatic replication, backup snapshots, and PostGIS spatial indexing.
         </p>
-        <div style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.5rem;">
-          <em>Current Equivalent:</em> SQLite (Local) or Free Tier Cloud PostgreSQL (Neon/Supabase).
+        <div style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.75rem;">
+          <em>Prototype Equivalent:</em> Local SQLite or Free Tier PostgreSQL (Neon/Supabase).
         </div>
-        <a href="https://aws.amazon.com/rds/" target="_blank" rel="noopener" style="font-size: 0.8rem; color: var(--color-brand); font-weight: 600; text-decoration: none;">
-          Read Official AWS RDS Docs ↗
+        <a href="https://aws.amazon.com/rds/" target="_blank" rel="noopener" style="font-size: 0.82rem; color: var(--color-cyan); font-weight: 700; text-decoration: none;">
+          Read Amazon RDS Docs ↗
         </a>
       </div>
 
       <!-- Amazon S3 -->
-      <div style="border: 1px solid var(--border-color); border-radius: var(--radius-sm); padding: 1.25rem;">
+      <div style="border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: 1.4rem; background: rgba(15, 23, 42, 0.4);">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
-          <h3 style="font-size: 1.05rem; font-weight: 700; color: var(--text-primary);">Amazon S3 (Simple Storage)</h3>
+          <h3 style="font-size: 1.1rem; font-weight: 800; color: #ffffff;">Amazon S3 (Simple Storage)</h3>
           <span class="badge badge-high" style="font-size: 0.7rem;">Planned</span>
         </div>
-        <p style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.5; margin-bottom: 0.75rem;">
-          <strong>What it is:</strong> Highly durable object storage for user-submitted pothole photos and dashcam snapshots, using pre-signed URLs to upload securely without hitting server compute.
+        <p style="font-size: 0.88rem; color: var(--text-secondary); line-height: 1.5; margin-bottom: 0.85rem;">
+          <strong>What it is:</strong> Infinite scale object storage for citizen-uploaded pothole photos, utilizing pre-signed URLs to upload directly.
         </p>
-        <div style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.5rem;">
-          <em>Current Equivalent:</em> Omitted in prototype to strictly adhere to ₹0 zero-cost budget.
+        <div style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.75rem;">
+          <em>Prototype Equivalent:</em> Omitted in initial prototype for strict ₹0 budget adherence.
         </div>
-        <a href="https://aws.amazon.com/s3/" target="_blank" rel="noopener" style="font-size: 0.8rem; color: var(--color-brand); font-weight: 600; text-decoration: none;">
-          Read Official AWS S3 Docs ↗
+        <a href="https://aws.amazon.com/s3/" target="_blank" rel="noopener" style="font-size: 0.82rem; color: var(--color-cyan); font-weight: 700; text-decoration: none;">
+          Read Amazon S3 Docs ↗
         </a>
       </div>
 
       <!-- CloudWatch & IAM -->
-      <div style="border: 1px solid var(--border-color); border-radius: var(--radius-sm); padding: 1.25rem;">
+      <div style="border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: 1.4rem; background: rgba(15, 23, 42, 0.4);">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
-          <h3 style="font-size: 1.05rem; font-weight: 700; color: var(--text-primary);">AWS CloudWatch &amp; IAM</h3>
+          <h3 style="font-size: 1.1rem; font-weight: 800; color: #ffffff;">CloudWatch &amp; IAM</h3>
           <span class="badge badge-high" style="font-size: 0.7rem;">Planned</span>
         </div>
-        <p style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.5; margin-bottom: 0.75rem;">
-          <strong>What they are:</strong> <em>CloudWatch</em> monitors API latency, error alarms, and log streams. <em>IAM (Identity and Access Management)</em> enforces the Principle of Least Privilege so functions only access what they need.
+        <p style="font-size: 0.88rem; color: var(--text-secondary); line-height: 1.5; margin-bottom: 0.85rem;">
+          <strong>What they are:</strong> <em>CloudWatch</em> monitors API latency, error metrics, and log streams. <em>IAM</em> enforces least privilege security credentials.
         </p>
-        <div style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.5rem;">
-          <em>Current Equivalent:</em> Python console logging and environment variable isolation.
+        <div style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.75rem;">
+          <em>Prototype Equivalent:</em> Python console logging and environment variable protection.
         </div>
-        <a href="https://aws.amazon.com/cloudwatch/" target="_blank" rel="noopener" style="font-size: 0.8rem; color: var(--color-brand); font-weight: 600; text-decoration: none;">
-          Read Official AWS CloudWatch Docs ↗
+        <a href="https://aws.amazon.com/cloudwatch/" target="_blank" rel="noopener" style="font-size: 0.82rem; color: var(--color-cyan); font-weight: 700; text-decoration: none;">
+          Read CloudWatch Docs ↗
         </a>
       </div>
     </div>
