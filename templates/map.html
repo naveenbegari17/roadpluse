@@ -1,0 +1,118 @@
+{% extends "base.html" %}
+
+{% block title %}Interactive Live Risk Map — RoadPulse{% endblock %}
+
+{% block content %}
+<div class="container">
+  <div style="margin-bottom: 1.25rem; display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 1rem;">
+    <div>
+      <h1 style="font-size: 1.85rem; font-weight: 800; color: var(--text-primary); margin-bottom: 0.25rem;">
+        Interactive Live Risk Map
+      </h1>
+      <p style="color: var(--text-secondary); font-size: 0.95rem;">
+        Explore geolocated road hazards and dynamically calculated Road Risk Scores across the city.
+      </p>
+    </div>
+    <div style="display: flex; gap: 0.5rem; align-items: center;">
+      <span style="font-size: 0.85rem; color: var(--text-secondary);">Showing: <strong id="reports-count-label">Loading...</strong> reports</span>
+      <a href="{{ url_for('report_hazard') }}" class="btn btn-primary btn-sm">＋ Pin New Hazard</a>
+    </div>
+  </div>
+
+  <div class="map-page-layout">
+    <!-- Filter Sidebar -->
+    <aside class="map-sidebar">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; padding-bottom: 0.5rem; border-bottom: 1px solid var(--border-color);">
+        <h2 style="font-size: 1rem; font-weight: 700; color: var(--text-primary);">Filter Hazards</h2>
+        <button id="btn-reset-filters" class="btn btn-secondary btn-sm" style="padding: 0.2rem 0.5rem; font-size: 0.78rem;">
+          Reset
+        </button>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="filter-category">Category</label>
+        <select class="form-control" id="filter-category">
+          <option value="">All Categories</option>
+          <option value="Pothole">Pothole</option>
+          <option value="Damaged Road">Damaged Road</option>
+          <option value="Broken Streetlight">Broken Streetlight</option>
+          <option value="Waterlogging">Waterlogging</option>
+          <option value="Dangerous Junction">Dangerous Junction</option>
+          <option value="Other">Other</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="filter-severity">Severity Level</label>
+        <select class="form-control" id="filter-severity">
+          <option value="">All Severities</option>
+          <option value="Critical">Critical (Score 75-100)</option>
+          <option value="High">High (Score 50-74)</option>
+          <option value="Medium">Medium (Score 25-49)</option>
+          <option value="Low">Low (Score 0-24)</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="filter-status">Lifecycle Status</label>
+        <select class="form-control" id="filter-status">
+          <option value="">All Statuses</option>
+          <option value="Reported">Reported</option>
+          <option value="Under Review">Under Review</option>
+          <option value="In Progress">In Progress</option>
+          <option value="Resolved">Resolved</option>
+        </select>
+      </div>
+
+      <!-- Risk Legend -->
+      <div style="margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid var(--border-color);">
+        <div style="font-size: 0.82rem; font-weight: 700; color: var(--text-primary); margin-bottom: 0.65rem;">
+          RISK CLASSIFICATION LEGEND
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 0.5rem; font-size: 0.8rem;">
+          <div style="display: flex; align-items: center; gap: 0.5rem;">
+            <span style="width: 14px; height: 14px; border-radius: 50%; background: var(--risk-critical); display: inline-block;"></span>
+            <span><strong>Critical Risk (75–100)</strong></span>
+          </div>
+          <div style="display: flex; align-items: center; gap: 0.5rem;">
+            <span style="width: 14px; height: 14px; border-radius: 50%; background: var(--risk-high); display: inline-block;"></span>
+            <span><strong>High Risk (50–74)</strong></span>
+          </div>
+          <div style="display: flex; align-items: center; gap: 0.5rem;">
+            <span style="width: 14px; height: 14px; border-radius: 50%; background: var(--risk-medium); display: inline-block;"></span>
+            <span><strong>Medium Risk (25–49)</strong></span>
+          </div>
+          <div style="display: flex; align-items: center; gap: 0.5rem;">
+            <span style="width: 14px; height: 14px; border-radius: 50%; background: var(--risk-low); display: inline-block;"></span>
+            <span><strong>Low Risk (0–24)</strong></span>
+          </div>
+        </div>
+      </div>
+
+      <div style="margin-top: 1.5rem; background: var(--bg-subtle); padding: 0.75rem; border-radius: var(--radius-sm); font-size: 0.78rem; color: var(--text-secondary);">
+        💡 <strong>Pro Tip:</strong> Click any map pin to view incident details, community recency score, and investigation timeline.
+      </div>
+    </aside>
+
+    <!-- Map Canvas & Empty State Notification -->
+    <div class="map-container">
+      <div id="map"></div>
+      
+      <!-- Empty State Overlay -->
+      <div id="map-empty-state" style="display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 500; background: rgba(255,255,255,0.95); padding: 2rem; border-radius: var(--radius-md); text-align: center; box-shadow: var(--shadow-lg); border: 1px solid var(--border-color); max-width: 320px;">
+        <div style="font-size: 2rem; margin-bottom: 0.5rem;">🔍</div>
+        <h3 style="font-size: 1.1rem; color: var(--text-primary); margin-bottom: 0.25rem;">No Hazards Match</h3>
+        <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 1rem;">
+          No reports match the current filter selection. Try resetting filters or adding a new report.
+        </p>
+        <button id="btn-empty-reset" class="btn btn-primary btn-sm">Reset Filters</button>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<script src="{{ url_for('static', filename='js/map.js') }}"></script>
+{% endblock %}

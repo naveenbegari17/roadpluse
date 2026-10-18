@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}RoadPulse — Roads That Speak{% endblock %}</title>
+  <meta name="description" content="RoadPulse is a citizen-powered zero-cost road safety intelligence platform helping communities report hazards, discover recurring issues, and prioritize road fixes.">
+  
+  <!-- Favicon Icon using SVG -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🛣️</text></svg>">
+  
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  
+  <!-- Leaflet CSS for maps -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+  
+  {% block extra_head %}{% endblock %}
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <header class="navbar">
+    <div class="container nav-container">
+      <a href="{{ url_for('index') }}" class="brand-logo" id="nav-brand">
+        <div class="brand-icon">🛣️</div>
+        <div class="brand-text">Road<span>Pulse</span></div>
+      </a>
+
+      <button class="mobile-toggle" id="mobile-menu-btn" aria-label="Toggle navigation">
+        ☰
+      </button>
+
+      <ul class="nav-links" id="nav-menu">
+        <li><a href="{{ url_for('index') }}" class="nav-link {% if request.path == '/' %}active{% endif %}" id="nav-home">Home</a></li>
+        <li><a href="{{ url_for('live_map') }}" class="nav-link {% if request.path == '/map' %}active{% endif %}" id="nav-map">Live Map</a></li>
+        <li><a href="{{ url_for('report_hazard') }}" class="nav-link {% if request.path == '/report' %}active{% endif %}" id="nav-report">Report a Hazard</a></li>
+        <li><a href="{{ url_for('analytics') }}" class="nav-link {% if request.path == '/analytics' %}active{% endif %}" id="nav-analytics">Analytics</a></li>
+        <li><a href="{{ url_for('aws_architecture') }}" class="nav-link {% if request.path == '/aws-architecture' %}active{% endif %}" id="nav-aws">AWS Architecture</a></li>
+        <li><a href="{{ url_for('about') }}" class="nav-link {% if request.path == '/about' %}active{% endif %}" id="nav-about">About</a></li>
+        <li><a href="{{ url_for('report_hazard') }}" class="btn btn-primary btn-sm" id="nav-cta-report">＋ Report Issue</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <!-- Flash Messages System -->
+  <div class="container flash-messages" style="margin-top: 1.5rem;">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="flash-alert flash-{{ category }}" role="alert">
+            <span>{{ message }}</span>
+            <button onclick="this.parentElement.remove()" style="background:none; border:none; cursor:pointer; font-size:1.1rem; color:inherit;">✕</button>
+          </div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
+    {% if error_title %}
+      <div class="card" style="text-align: center; padding: 4rem 2rem;">
+        <h1 style="font-size: 2rem; color: var(--risk-critical); margin-bottom: 1rem;">{{ error_title }}</h1>
+        <p style="color: var(--text-secondary); margin-bottom: 2rem;">{{ error_message }}</p>
+        <a href="{{ url_for('index') }}" class="btn btn-primary">Return to Homepage</a>
+      </div>
+    {% endif %}
+  </div>
+
+  <!-- Main Body Content -->
+  <main class="main-content">
+    {% block content %}{% endblock %}
+  </main>
+
+  <!-- Civic Tech Footer -->
+  <footer class="footer">
+    <div class="container footer-content">
+      <div>
+        <div style="font-weight: 700; color: var(--text-primary); margin-bottom: 0.25rem;">
+          RoadPulse — Roads That Speak. Communities That Act.
+        </div>
+        <p class="footer-disclaimer">
+          <strong>Academic & Civic Project Notice:</strong> RoadPulse is an experimental, citizen-driven intelligence prototype designed for educational demonstration. Calculated Road Risk Scores are mathematical triage indicators and do not guarantee accident predictions or represent official government notifications.
+        </p>
+      </div>
+      <div>
+        <div style="display: flex; gap: 1rem; align-items: center;">
+          <a href="{{ url_for('aws_architecture') }}" style="color: var(--color-brand); text-decoration: none; font-weight: 500;">Cloud Blueprint</a>
+          <span style="color: var(--border-color);">•</span>
+          <a href="{{ url_for('about') }}" style="color: var(--color-brand); text-decoration: none; font-weight: 500;">Methodology</a>
+          <span style="color: var(--border-color);">•</span>
+          <span style="color: var(--text-muted);">Zero-Cost Open Source</span>
+        </div>
+        <div style="font-size: 0.78rem; color: var(--text-muted); margin-top: 0.5rem; text-align: right;">
+          Built with Python, Flask, Leaflet &amp; OpenStreetMap
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Responsive Navbar toggle
+    const mobileBtn = document.getElementById('mobile-menu-btn');
+    const navMenu = document.getElementById('nav-menu');
+    if (mobileBtn && navMenu) {
+      mobileBtn.addEventListener('click', () => {
+        navMenu.classList.toggle('show');
+      });
+    }
+  </script>
+  {% block scripts %}{% endblock %}
+</body>
+</html>

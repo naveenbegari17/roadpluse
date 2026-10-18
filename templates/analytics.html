@@ -1,0 +1,145 @@
+{% extends "base.html" %}
+
+{% block title %}Road Safety Analytics — RoadPulse{% endblock %}
+
+{% block extra_head %}
+<!-- Chart.js for data visualization -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+  <div style="margin-bottom: 2rem;">
+    <div class="hero-pill" style="margin-bottom: 0.5rem;">
+      <span>📈</span> Citywide Incident Analytics
+    </div>
+    <h1 style="font-size: 1.85rem; font-weight: 800; color: var(--text-primary); margin-bottom: 0.25rem;">
+      Road Safety Analytics &amp; Problem Clustering
+    </h1>
+    <p style="color: var(--text-secondary); font-size: 0.95rem;">
+      Aggregated metrics powered by Chart.js showing category distribution, severity breakdown, and high-frequency incident hotspots.
+    </p>
+  </div>
+
+  <!-- 4 Main Charts Grid -->
+  <div class="charts-grid">
+    <div class="chart-card">
+      <h3 class="card-title" style="margin-bottom: 1rem;">Reports by Hazard Category</h3>
+      <div class="chart-wrapper">
+        <canvas id="chart-categories"></canvas>
+      </div>
+    </div>
+
+    <div class="chart-card">
+      <h3 class="card-title" style="margin-bottom: 1rem;">Reports by Severity Level</h3>
+      <div class="chart-wrapper">
+        <canvas id="chart-severities"></canvas>
+      </div>
+    </div>
+
+    <div class="chart-card">
+      <h3 class="card-title" style="margin-bottom: 1rem;">Road Risk Score Distribution</h3>
+      <div class="chart-wrapper">
+        <canvas id="chart-risk-dist"></canvas>
+      </div>
+    </div>
+
+    <div class="chart-card">
+      <h3 class="card-title" style="margin-bottom: 1rem;">Lifecycle Resolution Status</h3>
+      <div class="chart-wrapper">
+        <canvas id="chart-statuses"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <!-- Hotspots & Top Risk Tables -->
+  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(420px, 1fr)); gap: 1.5rem; margin-top: 1rem;">
+    <!-- Top 5 Recurring Locations -->
+    <div class="card">
+      <div class="card-header">
+        <h3 class="card-title">🔥 Top Recurring Complaint Locations</h3>
+        <span class="badge badge-high">Cluster Hotspots</span>
+      </div>
+      <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 1rem;">
+        Streets and junctions with multiple independent reports within ~500m radius.
+      </p>
+      <div class="table-responsive">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Location Landmark</th>
+              <th>Report Count</th>
+              <th>Avg Risk Score</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for item in stats.top_recurring_locations %}
+            <tr>
+              <td style="font-weight: 600;">📍 {{ item.location_name }}</td>
+              <td><span class="badge badge-status" style="font-size: 0.85rem;">{{ item.report_count }} reports</span></td>
+              <td><strong>{{ "%.1f"|format(item.avg_risk) }} / 100</strong></td>
+            </tr>
+            {% else %}
+            <tr>
+              <td colspan="3" style="text-align: center; color: var(--text-muted);">No recurring locations logged yet.</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Top 5 Highest Risk Reports -->
+    <div class="card">
+      <div class="card-header">
+        <h3 class="card-title">🚨 Highest Road Risk Reports</h3>
+        <span class="badge badge-critical">Immediate Priority</span>
+      </div>
+      <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 1rem;">
+        Calculated taking into account critical severity, repeat complaints, and recency.
+      </p>
+      <div class="table-responsive">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Hazard &amp; Location</th>
+              <th>Severity</th>
+              <th>Score</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for item in stats.top_highest_risk %}
+            <tr>
+              <td>
+                <div style="font-weight: 600;">{{ item.title }}</div>
+                <div style="font-size: 0.8rem; color: var(--text-secondary);">{{ item.location_name }}</div>
+              </td>
+              <td>
+                {% if item.severity|lower == 'critical' %}
+                  <span class="badge badge-critical">Critical</span>
+                {% elif item.severity|lower == 'high' %}
+                  <span class="badge badge-high">High</span>
+                {% else %}
+                  <span class="badge badge-medium">{{ item.severity }}</span>
+                {% endif %}
+              </td>
+              <td><strong style="font-size: 1.05rem;">{{ item.road_risk_score }}</strong></td>
+              <td><a href="{{ url_for('report_details', report_id=item.id) }}" class="btn btn-secondary btn-sm">View</a></td>
+            </tr>
+            {% else %}
+            <tr>
+              <td colspan="4" style="text-align: center; color: var(--text-muted);">No hazard data available.</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/analytics.js') }}"></script>
+{% endblock %}

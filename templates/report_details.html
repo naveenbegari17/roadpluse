@@ -1,0 +1,136 @@
+{% extends "base.html" %}
+
+{% block title %}{{ report.title }} — RoadPulse Hazard Details{% endblock %}
+
+{% block content %}
+<div class="container" style="max-width: 900px;">
+  <div style="margin-bottom: 1.25rem;">
+    <a href="{{ url_for('live_map') }}" style="color: var(--color-brand); text-decoration: none; font-size: 0.9rem; font-weight: 600;">
+      ← Back to Risk Map
+    </a>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <div>
+        <div style="display: flex; gap: 0.5rem; align-items: center; margin-bottom: 0.35rem;">
+          {% if report.severity|lower == 'critical' %}
+            <span class="badge badge-critical">Critical Severity</span>
+          {% elif report.severity|lower == 'high' %}
+            <span class="badge badge-high">High Severity</span>
+          {% elif report.severity|lower == 'medium' %}
+            <span class="badge badge-medium">Medium Severity</span>
+          {% else %}
+            <span class="badge badge-low">Low Severity</span>
+          {% endif %}
+
+          <span class="badge badge-status {% if report.status == 'Resolved' %}resolved{% endif %}">
+            Status: {{ report.status }}
+          </span>
+
+          {% if report.is_sample %}
+            <span style="font-size: 0.72rem; color: #64748b; background: #f1f5f9; padding: 2px 6px; border-radius: 4px;">
+              Sample Prototype Record
+            </span>
+          {% endif %}
+        </div>
+        <h1 style="font-size: 1.65rem; font-weight: 800; color: var(--text-primary);">
+          {{ report.title }}
+        </h1>
+      </div>
+
+      <!-- Risk Score Indicator Box -->
+      <div style="text-align: right; background: var(--bg-subtle); padding: 0.75rem 1.25rem; border-radius: var(--radius-sm); border: 1px solid var(--border-color);">
+        <div style="font-size: 0.75rem; text-transform: uppercase; font-weight: 700; color: var(--text-secondary);">
+          Road Risk Score
+        </div>
+        <div style="font-size: 2rem; font-weight: 900; color: {% if report.road_risk_score >= 75 %}var(--risk-critical){% elif report.road_risk_score >= 50 %}var(--risk-high){% elif report.road_risk_score >= 25 %}var(--risk-medium){% else %}var(--risk-low){% endif %};">
+          {{ report.road_risk_score }} <span style="font-size: 1rem; color: var(--text-muted); font-weight: 500;">/ 100</span>
+        </div>
+        <div style="font-size: 0.8rem; font-weight: 700;">{{ report.risk_classification }} Priority</div>
+      </div>
+    </div>
+
+    <!-- Metadata Grid -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 1.5rem; background: #fafbfc; padding: 1rem; border-radius: var(--radius-sm); border: 1px solid var(--border-color);">
+      <div>
+        <div style="font-size: 0.78rem; color: var(--text-muted); font-weight: 600;">CATEGORY</div>
+        <div style="font-weight: 600; color: var(--text-primary); font-size: 0.95rem;">{{ report.category }}</div>
+      </div>
+      <div>
+        <div style="font-size: 0.78rem; color: var(--text-muted); font-weight: 600;">LOCATION LANDMARK</div>
+        <div style="font-weight: 600; color: var(--text-primary); font-size: 0.95rem;">📍 {{ report.location_name }}</div>
+      </div>
+      <div>
+        <div style="font-size: 0.78rem; color: var(--text-muted); font-weight: 600;">GPS COORDINATES</div>
+        <div style="font-size: 0.9rem; color: var(--text-secondary); font-family: monospace;">
+          {{ report.latitude }}, {{ report.longitude }}
+        </div>
+      </div>
+      <div>
+        <div style="font-size: 0.78rem; color: var(--text-muted); font-weight: 600;">DATE REPORTED</div>
+        <div style="font-size: 0.9rem; color: var(--text-secondary);">{{ report.created_at[:16].replace('T', ' ') }} UTC</div>
+      </div>
+    </div>
+
+    <!-- Description -->
+    <div style="margin-bottom: 1.5rem;">
+      <h3 style="font-size: 1rem; font-weight: 700; color: var(--text-primary); margin-bottom: 0.4rem;">
+        Hazard Description
+      </h3>
+      <p style="color: var(--text-secondary); font-size: 0.95rem; line-height: 1.6; background: #ffffff; padding: 1rem; border: 1px solid var(--border-color); border-radius: var(--radius-sm);">
+        {{ report.description }}
+      </p>
+    </div>
+
+    <!-- Risk Explanation Breakdown -->
+    <div style="margin-bottom: 2rem; background: var(--color-brand-light); border: 1px solid #bfdbfe; padding: 1.25rem; border-radius: var(--radius-md);">
+      <h3 style="font-size: 0.95rem; font-weight: 700; color: var(--color-brand-hover); margin-bottom: 0.4rem; display: flex; align-items: center; gap: 0.4rem;">
+        <span>🧠</span> Scoring Engine Analysis
+      </h3>
+      <p style="color: #1e3a8a; font-size: 0.9rem; margin-bottom: 0.5rem;">
+        {{ report.risk_explanation }}
+      </p>
+      <div style="font-size: 0.78rem; color: #3b82f6;">
+        Formula: (Severity &times; 50%) + (Repeat &times; 30%) + (Recency &times; 20%). Triage guidance only.
+      </div>
+    </div>
+
+    <!-- Demonstration Lifecycle Admin Update Panel -->
+    <div style="border-top: 1px solid var(--border-color); padding-top: 1.5rem; background: #ffffff;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+        <h3 style="font-size: 1rem; font-weight: 700; color: var(--text-primary);">
+          Prototype Status Management (Demo Admin)
+        </h3>
+        <span style="font-size: 0.75rem; color: var(--text-muted);">Restricted demonstration safeguard</span>
+      </div>
+      <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 1rem;">
+        To prevent public trolling or unauthorized overwrites, entering the demo admin passkey (<strong>DEMO_ADMIN</strong>) is required to simulate a municipal triage decision.
+      </p>
+
+      <form action="{{ url_for('update_status', report_id=report.id) }}" method="POST" style="display: flex; gap: 0.75rem; flex-wrap: wrap; align-items: flex-end;">
+        <div style="flex: 1; min-width: 160px;">
+          <label class="form-label" for="status" style="font-size: 0.8rem;">Change Status</label>
+          <select class="form-control" name="status" id="status" required>
+            <option value="Reported" {% if report.status == 'Reported' %}selected{% endif %}>Reported</option>
+            <option value="Under Review" {% if report.status == 'Under Review' %}selected{% endif %}>Under Review</option>
+            <option value="In Progress" {% if report.status == 'In Progress' %}selected{% endif %}>In Progress</option>
+            <option value="Resolved" {% if report.status == 'Resolved' %}selected{% endif %}>Resolved</option>
+          </select>
+        </div>
+
+        <div style="flex: 1; min-width: 160px;">
+          <label class="form-label" for="admin_token" style="font-size: 0.8rem;">Demo Passkey (DEMO_ADMIN)</label>
+          <input type="password" class="form-control" name="admin_token" id="admin_token" placeholder="DEMO_ADMIN" required>
+        </div>
+
+        <div>
+          <button type="submit" class="btn btn-secondary" style="height: 40px;">
+            Update Status
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

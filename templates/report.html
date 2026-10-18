@@ -1,0 +1,156 @@
+{% extends "base.html" %}
+
+{% block title %}Report a Road Hazard — RoadPulse{% endblock %}
+
+{% block content %}
+<div class="container" style="max-width: 1000px;">
+  <div style="margin-bottom: 1.5rem;">
+    <h1 style="font-size: 1.85rem; font-weight: 800; color: var(--text-primary); margin-bottom: 0.35rem;">
+      Report a Road Hazard
+    </h1>
+    <p style="color: var(--text-secondary); font-size: 0.95rem;">
+      Help road users and civic authorities identify danger zones. Click the map to drop a pin or enter coordinates manually.
+    </p>
+  </div>
+
+  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;" class="report-grid">
+    <!-- Form Card -->
+    <div class="card">
+      <div class="card-header">
+        <h2 class="card-title">Hazard Information</h2>
+        <span class="badge badge-medium">Public Submission</span>
+      </div>
+
+      <form action="{{ url_for('report_hazard') }}" method="POST" id="hazard-report-form">
+        <div class="form-group">
+          <label class="form-label" for="title">Hazard Title *</label>
+          <input type="text" class="form-control" id="title" name="title" required
+                 placeholder="e.g. Hazardous Pothole near Metro Station"
+                 value="{{ form_data.get('title', '') }}">
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+          <div class="form-group">
+            <label class="form-label" for="category">Category *</label>
+            <select class="form-control" id="category" name="category" required>
+              <option value="" disabled {% if not form_data.get('category') %}selected{% endif %}>Select category...</option>
+              <option value="Pothole" {% if form_data.get('category') == 'Pothole' %}selected{% endif %}>Pothole</option>
+              <option value="Damaged Road" {% if form_data.get('category') == 'Damaged Road' %}selected{% endif %}>Damaged Road</option>
+              <option value="Broken Streetlight" {% if form_data.get('category') == 'Broken Streetlight' %}selected{% endif %}>Broken Streetlight</option>
+              <option value="Waterlogging" {% if form_data.get('category') == 'Waterlogging' %}selected{% endif %}>Waterlogging</option>
+              <option value="Dangerous Junction" {% if form_data.get('category') == 'Dangerous Junction' %}selected{% endif %}>Dangerous Junction</option>
+              <option value="Other" {% if form_data.get('category') == 'Other' %}selected{% endif %}>Other</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="severity">Severity Level *</label>
+            <select class="form-control" id="severity" name="severity" required>
+              <option value="" disabled {% if not form_data.get('severity') %}selected{% endif %}>Select severity...</option>
+              <option value="Low" {% if form_data.get('severity') == 'Low' %}selected{% endif %}>Low (Minor wear / Cosmetic)</option>
+              <option value="Medium" {% if form_data.get('severity') == 'Medium' %}selected{% endif %}>Medium (Slow traffic / Minor hazard)</option>
+              <option value="High" {% if form_data.get('severity') == 'High' %}selected{% endif %}>High (Vehicle damage risk)</option>
+              <option value="Critical" {% if form_data.get('severity') == 'Critical' %}selected{% endif %}>Critical (Severe safety/life hazard)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="location_name">Location Landmark / Street Name *</label>
+          <input type="text" class="form-control" id="location_name" name="location_name" required
+                 placeholder="e.g. Hitec City Main Road, near Pillar 12"
+                 value="{{ form_data.get('location_name', '') }}">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="description">Detailed Description *</label>
+          <textarea class="form-control" id="description" name="description" rows="3" required
+                    placeholder="Describe size, road conditions, visibility or obstruction details...">{{ form_data.get('description', '') }}</textarea>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+          <div class="form-group">
+            <label class="form-label" for="latitude">Latitude (GPS) *</label>
+            <input type="number" step="any" class="form-control" id="latitude" name="latitude" required
+                   placeholder="17.4435" value="{{ form_data.get('latitude', '17.4435') }}">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="longitude">Longitude (GPS) *</label>
+            <input type="number" step="any" class="form-control" id="longitude" name="longitude" required
+                   placeholder="78.3772" value="{{ form_data.get('longitude', '78.3772') }}">
+          </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary" id="btn-submit-report" style="width: 100%; margin-top: 0.5rem;">
+          🚀 Submit Road Hazard Report
+        </button>
+      </form>
+    </div>
+
+    <!-- Map Pinning Helper Card -->
+    <div class="card" style="display: flex; flex-direction: column;">
+      <div class="card-header">
+        <h2 class="card-title">Pinpoint on Map</h2>
+        <span style="font-size: 0.78rem; color: var(--text-muted);">Click anywhere to move pin</span>
+      </div>
+      <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 0.75rem;">
+        Coordinates will automatically populate in the form. Initial view centered around Hyderabad, India.
+      </p>
+      <div style="flex: 1; min-height: 380px; border-radius: var(--radius-sm); overflow: hidden; border: 1px solid var(--border-color); position: relative;">
+        <div id="picker-map" style="width: 100%; height: 100%;"></div>
+      </div>
+      <div style="margin-top: 0.75rem; font-size: 0.78rem; color: var(--text-muted); display: flex; align-items: center; gap: 0.4rem;">
+        <span>ℹ️</span> Zero-cost OpenStreetMap tiles used in compliance with OSM usage policy.
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const defaultLat = parseFloat(document.getElementById('latitude').value) || 17.4435;
+    const defaultLng = parseFloat(document.getElementById('longitude').value) || 78.3772;
+
+    const map = L.map('picker-map').setView([defaultLat, defaultLng], 13);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 19,
+      attribution: '&copy; <a href="https://openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(map);
+
+    let marker = L.marker([defaultLat, defaultLng], { draggable: true }).addTo(map);
+
+    function updateInputs(lat, lng) {
+      document.getElementById('latitude').value = lat.toFixed(6);
+      document.getElementById('longitude').value = lng.toFixed(6);
+    }
+
+    map.on('click', function(e) {
+      marker.setLatLng(e.latlng);
+      updateInputs(e.latlng.lat, e.latlng.lng);
+    });
+
+    marker.on('dragend', function(e) {
+      const pos = marker.getLatLng();
+      updateInputs(pos.lat, pos.lng);
+    });
+
+    // Prevent duplicate accidental double submissions
+    const form = document.getElementById('hazard-report-form');
+    const submitBtn = document.getElementById('btn-submit-report');
+    form.addEventListener('submit', function() {
+      submitBtn.disabled = true;
+      submitBtn.innerText = 'Submitting & Computing Risk...';
+    });
+  });
+</script>
+<style>
+  @media (max-width: 768px) {
+    .report-grid {
+      grid-template-columns: 1fr !important;
+    }
+  }
+</style>
+{% endblock %}
